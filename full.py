@@ -4,11 +4,13 @@ import socket
 import sys
 import time
 import warnings
+
 import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QMenu, QMainWindow, QWidget, QAction, QTabWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAction, QTabWidget
 from PyQt5.uic import loadUi
+
 
 receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 receiver.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -19,9 +21,26 @@ sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+# port tespit etme - baslangic
 
-# Set a timeout so the socket does not block
-# indefinitely when trying to receive data.
+ports = [
+    p.device
+    for p in serial.tools.list_ports.comports()
+    if 'USB' or 'COM' in p.description
+]
+
+baudrate = [1200, 2400, 4800, 9600, 115200]
+
+if not ports:
+    raise IOError("Seri Baglantili cihaz yok!")
+
+if len(ports) > 1:
+    warnings.warn('Baglanildi....')
+
+ser = serial.Serial(ports[0], baudrate[3])
+
+
+# port tespit etme - son
 
 
 class Worker(QObject):
@@ -39,8 +58,8 @@ class Worker(QObject):
             # print(line)
             time.sleep(0.05)
             self.intReady.emit(line)
-        # if line != '':
-        # self.textEdit_3.append(line)
+            # if line != '':
+            # self.textEdit_3.append(line)
 
         self.finished.emit()
 
@@ -77,7 +96,7 @@ class Worker3(QObject):
         # host = self.textEdit_10.toPlainText()
         # port_tcp = self.textEdit_12.toPlainText()
         host = socket.gethostname()
-        s.connect((host, 80))  # Connect to server address
+        s.connect(('127.0.0.1', 80))  # Connect to server address
 
         while self.working:
             msg = s.recv(512)
@@ -98,11 +117,8 @@ class Worker4(QObject):
         self.working = True
 
     def work(self):
-        s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        # host = self.textEdit_38.toPlainText()
-        # port_tcp = self.textEdit_39.toPlainText()
-        server_address = ('', 80)
+        server_address = ('127.0.0.1', 80)
+        print("connected:")
         s2.bind(server_address)
         s2.listen(1)
 
@@ -110,14 +126,14 @@ class Worker4(QObject):
 
         while self.working:
             print("Bağlantılar Aranıyor...... ")
-            # q, addr = s2.accept()  # Accepts incoming request from client and returns
+            q, addr = s2.accept()
             # print(q)
             #
             # print("Multithreaded Python server : Waiting for connections from TCP clients...")
             #
-            # q.send(data)
+            q.send(b"dfghjklfgkfjh")
 
-            #data = q.recv(512)
+            # data = q.recv(512)
 
         self.intReady.emit(q)
         self.finished.emit()
@@ -133,10 +149,10 @@ class qt(QMainWindow):
 
         self.thread = None
         self.worker = None
-        self.thread2 =None
+        self.thread2 = None
         self.thread3 = None
         self.pushButton.clicked.connect(self.start_loop)
-        self.label_11.setText('deneme')
+        self.label_11.setText(ports[0])
         self.pushButton_6.clicked.connect(self.start_loop2)
         self.pushButton_9.clicked.connect(self.start_loop3)
         self.pushButton_38.clicked.connect(self.start_loop4)
@@ -184,6 +200,8 @@ class qt(QMainWindow):
         self.thread2.finished.connect(self.thread2.deleteLater)  # have thread mark itself for deletion
         # make sure those last two are connected to themselves or you will get random crashes
         self.thread2.start()
+        self.label_19.setText("Bağlantı Başarılı")
+        self.label_19.setStyleSheet('color: green')
 
     def start_loop3(self):
         print("thread is started")
@@ -198,9 +216,7 @@ class qt(QMainWindow):
         self.pushButton_10.clicked.connect(self.stop_loop)  # stop the loop on the stop button click
 
         self.worker.finished.connect(self.thread3.quit)  # tell the thread it's time to stop running
-        self.worker.finished.connect(self.worker.deleteLater)  # have worker mark itself for deletion
-        self.thread3.finished.connect(self.thread3.deleteLater)  # have thread mark itself for deletion
-        # make sure those last two are connected to themselves or you will get random crashes
+
         self.thread3.start()
 
     def start_loop4(self):
@@ -208,7 +224,6 @@ class qt(QMainWindow):
         self.worker = Worker4()  # a new worker to perform those tasks
         self.thread4 = QThread()  # a new thread to run our background tasks in
         self.worker.moveToThread(self.thread4)
-
 
         # move the worker into the thread, do this first before connecting the signals
         self.thread4.started.connect(self.worker.work)
@@ -219,19 +234,26 @@ class qt(QMainWindow):
 
         self.worker.finished.connect(self.thread4.quit)  # tell the thread it's time to stop running
         self.worker.finished.connect(self.worker.deleteLater)  # have worker mark itself for deletion
-        self.thread4.finished.connect(self.thread4.deleteLater)  # have thread mark itself for deletion
-        # make sure those last two are connected to themselves or you will get random crashes
-        data=self.textEdit_37.toPlainText()
+        self.thread4.finished.connect(self.thread4.deleteLater)
         self.thread4.start()
+
+    def on_pushButton_11_clicked(self):
+        host = self.textEdit_10.toPlainText()
+        port_tcp = self.textEdit_12.toPlainText()
+
+    # def on_pushButton_13_clicked(self):
+
+    #
+    # global host2 = self.textEdit_38.toPlainText()
+    # global port_tcp2 = self.textEdit_39.toPlainText()
 
     def onintready3(self, msg2):
         self.textEdit_3.append("{}".format(msg2))
 
     def onintready4(self, q):
         self.q
-        data=self.textEdit_37.toPlainText()
+        data = self.textEdit_37.toPlainText()
         q.send(data)
-
 
     def on_pushButton_3_clicked(self):
         mytext = self.textEdit_2.toPlainText()
@@ -245,11 +267,10 @@ class qt(QMainWindow):
         self.textEdit_8.append("{}".format(i))
 
     def on_pushButton_4_clicked(self):
-        if self.x != 0:
-            self.textEdit.setText('Ayarlar Kaydedildi!')
-        else:
-            # print('hata')
-            self.textEdit.setText('Lütfen Port ve Hızı girin!')
+        self.textEdit.setText('Ayarlar Kaydedildi!')
+        # else:
+        #     # print('hata')
+        #     self.textEdit.setText('Lütfen Port ve Hızı girin!')
 
         # TXT YAZDIRMA ------ KAYDETME
 
@@ -276,30 +297,6 @@ class qt(QMainWindow):
         self.label_5.setStyleSheet('color: green')
         x = 1
         # self.textEdit_3.setText(":")
-
-    # ports = [
-    #     p.device
-    #     for p in serial.tools.list_ports.comports()
-    #     if 'USB' or 'COM' in p.description
-    # ]
-    #
-    # baudrate = [1200, 2400, 4800, 9600, 115200]
-    #
-    #
-    # if not ports:
-    #     raise IOError("Seri Baglantili cihaz yok!")
-    #
-    # if len(ports) > 1:
-    #     warnings.warn('Baglanildi....')
-    #
-    # ser = serial.Serial('tty/USB0', baudrate[3])
-
-    # port tespit etme - son
-
-    # class Foo(QThread):
-
-    #    def connect(self):
-    #        connect(pushButton_2, SIGNAL("clicked()"), on_pushButton_2_clicked)
 
     # MULTI-THREADING
 
@@ -343,7 +340,6 @@ class qt(QMainWindow):
 
     # TCP CLIENT:
 
-
     def on_pushButton_10_clicked(self):
         self.textEdit_3.setText("Baglanti Kapatildi")
         s.close()
@@ -351,7 +347,7 @@ class qt(QMainWindow):
     # TCP SERVER:
     def on_pushButton_37_clicked(self):
 
-        data=self.textEdit_37.toPlainText()
+        data = self.textEdit_37.toPlainText()
         q, addr = s2.accept()
         data.encode()
         q.send(bytearray(data))
@@ -359,7 +355,6 @@ class qt(QMainWindow):
     def on_pushButton_39_clicked(self):
         self.textEdit_40.setText("Baglanti Kapatildi")
         s2.close()
-
 
 
 def run():
