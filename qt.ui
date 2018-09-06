@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>734</width>
-    <height>520</height>
+    <height>493</height>
    </rect>
   </property>
   <property name="cursor">
@@ -67,7 +67,7 @@
            <x>0</x>
            <y>3</y>
            <width>531</width>
-           <height>381</height>
+           <height>361</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -284,7 +284,7 @@
            <x>540</x>
            <y>340</y>
            <width>171</width>
-           <height>41</height>
+           <height>21</height>
           </rect>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
@@ -352,7 +352,7 @@
           <item>
            <widget class="QProgressBar" name="progressBar">
             <property name="value">
-             <number>24</number>
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -365,41 +365,22 @@
          <property name="geometry">
           <rect>
            <x>390</x>
-           <y>410</y>
+           <y>390</y>
            <width>121</width>
-           <height>41</height>
+           <height>31</height>
           </rect>
          </property>
          <property name="text">
           <string>Gönder</string>
          </property>
         </widget>
-        <widget class="QLabel" name="label">
-         <property name="geometry">
-          <rect>
-           <x>640</x>
-           <y>400</y>
-           <width>81</width>
-           <height>51</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap>index.jpeg</pixmap>
-         </property>
-         <property name="scaledContents">
-          <bool>true</bool>
-         </property>
-        </widget>
         <widget class="QPushButton" name="pushButton_5">
          <property name="geometry">
           <rect>
-           <x>510</x>
-           <y>410</y>
+           <x>590</x>
+           <y>390</y>
            <width>121</width>
-           <height>41</height>
+           <height>31</height>
           </rect>
          </property>
          <property name="text">
@@ -410,9 +391,9 @@
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>410</y>
+           <y>390</y>
            <width>391</width>
-           <height>41</height>
+           <height>31</height>
           </rect>
          </property>
         </widget>
@@ -420,13 +401,26 @@
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>385</y>
+           <y>359</y>
            <width>451</width>
            <height>31</height>
           </rect>
          </property>
          <property name="text">
           <string> Veri Gönder:</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_14">
+         <property name="geometry">
+          <rect>
+           <x>510</x>
+           <y>390</y>
+           <width>81</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>HEX</string>
          </property>
         </widget>
        </widget>
@@ -440,7 +434,7 @@
            <x>0</x>
            <y>40</y>
            <width>591</width>
-           <height>181</height>
+           <height>171</height>
           </rect>
          </property>
         </widget>
@@ -487,9 +481,9 @@
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>270</y>
+           <y>260</y>
            <width>591</width>
-           <height>181</height>
+           <height>161</height>
           </rect>
          </property>
         </widget>
@@ -510,7 +504,7 @@
          <property name="geometry">
           <rect>
            <x>600</x>
-           <y>300</y>
+           <y>270</y>
            <width>121</width>
            <height>51</height>
           </rect>
@@ -523,13 +517,13 @@
          <property name="geometry">
           <rect>
            <x>600</x>
-           <y>360</y>
+           <y>330</y>
            <width>118</width>
            <height>23</height>
           </rect>
          </property>
          <property name="value">
-          <number>24</number>
+          <number>0</number>
          </property>
         </widget>
         <widget class="QWidget" name="horizontalLayoutWidget">
@@ -620,7 +614,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>120</x>
-           <y>220</y>
+           <y>210</y>
            <width>251</width>
            <height>51</height>
           </rect>
@@ -639,7 +633,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>600</x>
-           <y>390</y>
+           <y>360</y>
            <width>121</width>
            <height>41</height>
           </rect>
@@ -672,16 +666,16 @@ p, li { white-space: pre-wrap; }
            <x>0</x>
            <y>40</y>
            <width>591</width>
-           <height>311</height>
+           <height>291</height>
           </rect>
          </property>
         </widget>
         <widget class="QWidget" name="horizontalLayoutWidget_2">
          <property name="geometry">
           <rect>
-           <x>270</x>
+           <x>230</x>
            <y>0</y>
-           <width>451</width>
+           <width>491</width>
            <height>31</height>
           </rect>
          </property>
@@ -750,8 +744,8 @@ p, li { white-space: pre-wrap; }
         <widget class="QLabel" name="label_21">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>360</y>
+           <x>170</x>
+           <y>340</y>
            <width>361</width>
            <height>71</height>
           </rect>
@@ -766,24 +760,11 @@ p, li { white-space: pre-wrap; }
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_10">
-         <property name="geometry">
-          <rect>
-           <x>600</x>
-           <y>180</y>
-           <width>121</width>
-           <height>61</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Portu Kapat!</string>
-         </property>
-        </widget>
         <widget class="QPushButton" name="pushButton_9">
          <property name="geometry">
           <rect>
            <x>600</x>
-           <y>120</y>
+           <y>50</y>
            <width>121</width>
            <height>61</height>
           </rect>
@@ -792,30 +773,56 @@ p, li { white-space: pre-wrap; }
           <string>Dinle</string>
          </property>
         </widget>
+        <widget class="QPushButton" name="pushButton_10">
+         <property name="geometry">
+          <rect>
+           <x>600</x>
+           <y>110</y>
+           <width>121</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Portu Kapat!</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_24">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>340</y>
+           <width>221</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Server'den Dosya Al:</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_15">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>360</y>
+           <width>151</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Dosya Konumunu Aç</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QWidget" name="tab_4">
         <attribute name="title">
          <string>TCP SERVER</string>
         </attribute>
-        <widget class="QLabel" name="label_70">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>10</y>
-           <width>91</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Alıcı:</string>
-         </property>
-        </widget>
         <widget class="QPushButton" name="pushButton_37">
          <property name="geometry">
           <rect>
-           <x>610</x>
-           <y>360</y>
-           <width>101</width>
+           <x>600</x>
+           <y>150</y>
+           <width>121</width>
            <height>51</height>
           </rect>
          </property>
@@ -829,7 +836,7 @@ p, li { white-space: pre-wrap; }
            <x>600</x>
            <y>50</y>
            <width>121</width>
-           <height>51</height>
+           <height>31</height>
           </rect>
          </property>
          <property name="text">
@@ -839,23 +846,23 @@ p, li { white-space: pre-wrap; }
         <widget class="QProgressBar" name="progressBar_10">
          <property name="geometry">
           <rect>
-           <x>610</x>
-           <y>330</y>
-           <width>101</width>
+           <x>600</x>
+           <y>120</y>
+           <width>121</width>
            <height>20</height>
           </rect>
          </property>
          <property name="value">
-          <number>24</number>
+          <number>0</number>
          </property>
         </widget>
         <widget class="QTextEdit" name="textEdit_37">
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>280</y>
+           <y>40</y>
            <width>591</width>
-           <height>161</height>
+           <height>151</height>
           </rect>
          </property>
          <property name="html">
@@ -870,9 +877,9 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>600</x>
-           <y>110</y>
+           <y>80</y>
            <width>121</width>
-           <height>51</height>
+           <height>31</height>
           </rect>
          </property>
          <property name="text">
@@ -882,9 +889,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QWidget" name="horizontalLayoutWidget_10">
          <property name="geometry">
           <rect>
-           <x>240</x>
+           <x>150</x>
            <y>0</y>
-           <width>481</width>
+           <width>571</width>
            <height>31</height>
           </rect>
          </property>
@@ -937,21 +944,11 @@ p, li { white-space: pre-wrap; }
           </item>
          </layout>
         </widget>
-        <widget class="QTextEdit" name="textEdit_40">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>40</y>
-           <width>591</width>
-           <height>191</height>
-          </rect>
-         </property>
-        </widget>
         <widget class="QLabel" name="label_74">
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>260</y>
+           <y>10</y>
            <width>201</width>
            <height>16</height>
           </rect>
@@ -963,10 +960,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QLabel" name="label_71">
          <property name="geometry">
           <rect>
-           <x>170</x>
-           <y>230</y>
-           <width>261</width>
-           <height>51</height>
+           <x>270</x>
+           <y>200</y>
+           <width>321</width>
+           <height>61</height>
           </rect>
          </property>
          <property name="text">
@@ -978,6 +975,90 @@ p, li { white-space: pre-wrap; }
          <property name="scaledContents">
           <bool>true</bool>
          </property>
+        </widget>
+        <widget class="QLabel" name="label_75">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>200</y>
+           <width>231</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Dosya Gönder:</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_16">
+         <property name="geometry">
+          <rect>
+           <x>200</x>
+           <y>270</y>
+           <width>171</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Dosya Gönder</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_17">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>220</y>
+           <width>201</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Gönderilecek Dosyayı Seçiniz...</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>220</y>
+           <width>51</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>1.jpg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>-1</x>
+           <y>270</y>
+           <width>201</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Seçili Dosya:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>

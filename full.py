@@ -1,5 +1,6 @@
 __author__ = 'Mehmet Cagri Aksoy - github.com/mcagriaksoy'
 
+import binascii
 import socket
 import sys
 import time
@@ -8,9 +9,9 @@ import warnings
 import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAction, QTabWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAction, QApplication, QWidget, QInputDialog, QLineEdit, \
+    QFileDialog, QTabWidget
 from PyQt5.uic import loadUi
-
 
 receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 receiver.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -97,18 +98,22 @@ class Worker3(QObject):
         # port_tcp = self.textEdit_12.toPlainText()
         host = socket.gethostname()
         s.connect(('127.0.0.1', 80))  # Connect to server address
+        with open('received_file', 'wb') as f:
+            print("file opened")
 
-        while self.working:
-            msg = s.recv(512)
-            print("Message from server : " + msg.strip().decode('ascii'))
-            msg2 = msg.decode('ascii')
-            self.intReady.emit(msg2)
-        self.finished.emit()
+            while self.working:
+                msg = s.recv(1024)
+                print('data=%s', (msg))
+                f.write(msg)
+                print("Message from server : " + msg.strip().decode('ascii'))
+                msg2 = msg.decode('ascii')
+                self.intReady.emit(msg2)
+            self.finished.emit()
 
 
 class Worker4(QObject):
     finished = pyqtSignal()
-    intReady = pyqtSignal(str)
+
 
     @pyqtSlot()
     def __init__(self):
@@ -116,7 +121,8 @@ class Worker4(QObject):
         super(Worker4, self).__init__()
         self.working = True
 
-    def work(self):
+    @pyqtSlot()
+    def run(self):
         server_address = ('127.0.0.1', 80)
         print("connected:")
         s2.bind(server_address)
@@ -125,22 +131,20 @@ class Worker4(QObject):
         print("Listening for connections.. ")
 
         while self.working:
+            f = open(fileName, 'rb')
+            l = f.read(1024)
+            print(l)
             print("Bağlantılar Aranıyor...... ")
             q, addr = s2.accept()
-            # print(q)
-            #
-            # print("Multithreaded Python server : Waiting for connections from TCP clients...")
-            #
-            q.send(b"dfghjklfgkfjh")
+            q.send(l)
+            print('Sent ', repr(l))
 
-            # data = q.recv(512)
-
-        self.intReady.emit(q)
         self.finished.emit()
 
 
 # port tespit etme - baslangic
 class qt(QMainWindow):
+    trigger = pyqtSignal(str)
 
     def __init__(self):
 
@@ -151,11 +155,25 @@ class qt(QMainWindow):
         self.worker = None
         self.thread2 = None
         self.thread3 = None
+        self.thread4=None
         self.pushButton.clicked.connect(self.start_loop)
         self.label_11.setText(ports[0])
         self.pushButton_6.clicked.connect(self.start_loop2)
         self.pushButton_9.clicked.connect(self.start_loop3)
-        self.pushButton_38.clicked.connect(self.start_loop4)
+        self.pushButton_17.clicked.connect(self.start_loop4)
+
+    @pyqtSlot(Worker4)
+    def filesystem(self):
+
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
+                                                  "All Files (*);;Python Files (*.py)", options=options)
+        self.trigger.connect(self.fileName)
+        self.trigger.emit(fileName)
+        if fileName:
+            self.label_26.setText(fileName)
+
 
     def loop_finished(self):
         print('Looped Finished')
@@ -203,6 +221,7 @@ class qt(QMainWindow):
         self.label_19.setText("Bağlantı Başarılı")
         self.label_19.setStyleSheet('color: green')
 
+
     def start_loop3(self):
         print("thread is started")
         self.worker = Worker3()  # a new worker to perform those tasks
@@ -226,15 +245,16 @@ class qt(QMainWindow):
         self.worker.moveToThread(self.thread4)
 
         # move the worker into the thread, do this first before connecting the signals
-        self.thread4.started.connect(self.worker.work)
-        # begin our worker object's loop when the thread starts running
-        self.worker.intReady.connect(self.onintready4)
+        self.thread4.started.connect(self.worker.run)
+        # # begin our worker object's loop when the thread starts running
+        # self.worker.fileName.connect(self.onintready4)
         self.worker.finished.connect(self.loop_finished)  # do something in the gui when the worker loop ends
         self.pushButton_39.clicked.connect(self.stop_loop)  # stop the loop on the stop button click
 
         self.worker.finished.connect(self.thread4.quit)  # tell the thread it's time to stop running
         self.worker.finished.connect(self.worker.deleteLater)  # have worker mark itself for deletion
         self.thread4.finished.connect(self.thread4.deleteLater)
+        self.filesystem()
         self.thread4.start()
 
     def on_pushButton_11_clicked(self):
@@ -250,15 +270,20 @@ class qt(QMainWindow):
     def onintready3(self, msg2):
         self.textEdit_3.append("{}".format(msg2))
 
-    def onintready4(self, q):
-        self.q
-        data = self.textEdit_37.toPlainText()
-        q.send(data)
+    def onintready4(self):
+        print('mmm')
+
+
 
     def on_pushButton_3_clicked(self):
         mytext = self.textEdit_2.toPlainText()
         print(mytext)
         ser.write(mytext.encode())
+
+    def on_pushButton_14_clicked(self):
+        mytext = self.textEdit_2.toPlainText()
+        mytext2 = mytext.encode("utf-8")
+        ser.write(mytext2)
 
     def stop_loop(self):
         self.worker.working = False
