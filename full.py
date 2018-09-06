@@ -97,33 +97,31 @@ class Worker3(QObject):
         # host = self.textEdit_10.toPlainText()
         # port_tcp = self.textEdit_12.toPlainText()
         host = socket.gethostname()
-        s.connect(('127.0.0.1', 80))  # Connect to server address
-        with open('received_file', 'wb') as f:
-            print("file opened")
+        s.connect(('127.0.0.1', 4447))  # Connect to server address
 
-            while self.working:
-                msg = s.recv(1024)
-                print('data=%s', (msg))
-                f.write(msg)
-                print("Message from server : " + msg.strip().decode('ascii'))
-                msg2 = msg.decode('ascii')
-                self.intReady.emit(msg2)
-            self.finished.emit()
+
+        while self.working:
+            msg = s.recv(1024)
+            print('data=%s', (msg))
+            # f.write(msg)
+            print("Message from server : " + msg.strip().decode('ascii'))
+            msg2 = msg.decode('ascii')
+            self.intReady.emit(msg2)
+        self.finished.emit()
 
 
 class Worker4(QObject):
     finished = pyqtSignal()
-
-
-    @pyqtSlot()
+    intReady = pyqtSignal(str)
+    @pyqtSlot(str)
     def __init__(self):
         QMainWindow.__init__(self)
         super(Worker4, self).__init__()
         self.working = True
 
-    @pyqtSlot()
-    def run(self):
-        server_address = ('127.0.0.1', 80)
+
+    def work(self):
+        server_address = ('127.0.0.1', 4447)
         print("connected:")
         s2.bind(server_address)
         s2.listen(1)
@@ -131,20 +129,20 @@ class Worker4(QObject):
         print("Listening for connections.. ")
 
         while self.working:
-            f = open(fileName, 'rb')
-            l = f.read(1024)
-            print(l)
+            # f = open(a.txt, 'rb')
+            # l = f.read(1024)
+            # print(l)
             print("Bağlantılar Aranıyor...... ")
             q, addr = s2.accept()
-            q.send(l)
-            print('Sent ', repr(l))
+
+            q.send(b"deneme")
+            # print('Sent ', repr(l))
 
         self.finished.emit()
 
 
 # port tespit etme - baslangic
 class qt(QMainWindow):
-    trigger = pyqtSignal(str)
 
     def __init__(self):
 
@@ -155,25 +153,32 @@ class qt(QMainWindow):
         self.worker = None
         self.thread2 = None
         self.thread3 = None
-        self.thread4=None
+        self.thread4 = None
         self.pushButton.clicked.connect(self.start_loop)
         self.label_11.setText(ports[0])
         self.pushButton_6.clicked.connect(self.start_loop2)
         self.pushButton_9.clicked.connect(self.start_loop3)
-        self.pushButton_17.clicked.connect(self.start_loop4)
+        self.pushButton_38.clicked.connect(self.start_loop4)
+        self.pushButton_17.clicked.connect(self.getOpenFileName)
 
-    @pyqtSlot(Worker4)
-    def filesystem(self):
 
+    # def pushButton_17_clicked(self):
+    #     getOpenFileName()
+
+    def getOpenFileName(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
                                                   "All Files (*);;Python Files (*.py)", options=options)
-        self.trigger.connect(self.fileName)
-        self.trigger.emit(fileName)
+        # self.trigger.connect(self.fileName)
+        # self.trigger.emit(fileName)
         if fileName:
             self.label_26.setText(fileName)
 
+    def on_pushButton_16_clicked(self):
+
+        self.trigger.connect(self.work)
+        self.trigger.emit(fileName)
 
     def loop_finished(self):
         print('Looped Finished')
@@ -221,7 +226,6 @@ class qt(QMainWindow):
         self.label_19.setText("Bağlantı Başarılı")
         self.label_19.setStyleSheet('color: green')
 
-
     def start_loop3(self):
         print("thread is started")
         self.worker = Worker3()  # a new worker to perform those tasks
@@ -243,9 +247,12 @@ class qt(QMainWindow):
         self.worker = Worker4()  # a new worker to perform those tasks
         self.thread4 = QThread()  # a new thread to run our background tasks in
         self.worker.moveToThread(self.thread4)
+        self.label_27.setText("Bağlantı Başarılı")
+        self.label_27.setStyleSheet('color: green')
 
         # move the worker into the thread, do this first before connecting the signals
-        self.thread4.started.connect(self.worker.run)
+        self.thread4.started.connect(self.worker.work)
+        self.worker.intReady.connect(self.onintready4)
         # # begin our worker object's loop when the thread starts running
         # self.worker.fileName.connect(self.onintready4)
         self.worker.finished.connect(self.loop_finished)  # do something in the gui when the worker loop ends
@@ -254,7 +261,6 @@ class qt(QMainWindow):
         self.worker.finished.connect(self.thread4.quit)  # tell the thread it's time to stop running
         self.worker.finished.connect(self.worker.deleteLater)  # have worker mark itself for deletion
         self.thread4.finished.connect(self.thread4.deleteLater)
-        self.filesystem()
         self.thread4.start()
 
     def on_pushButton_11_clicked(self):
@@ -270,10 +276,9 @@ class qt(QMainWindow):
     def onintready3(self, msg2):
         self.textEdit_3.append("{}".format(msg2))
 
-    def onintready4(self):
+    def onintready4(self,fileName):
         print('mmm')
-
-
+        self.intReady.emit(fileName)
 
     def on_pushButton_3_clicked(self):
         mytext = self.textEdit_2.toPlainText()
@@ -371,11 +376,16 @@ class qt(QMainWindow):
 
     # TCP SERVER:
     def on_pushButton_37_clicked(self):
+        self.completed2 = 0
+        while self.completed2 < 100:
+            self.completed2 += 0.001
+            self.progressBar_10.setValue(self.completed2)
 
         data = self.textEdit_37.toPlainText()
         q, addr = s2.accept()
+        time.sleep(0.1)
         data.encode()
-        q.send(bytearray(data))
+        q.send(data)
 
     def on_pushButton_39_clicked(self):
         self.textEdit_40.setText("Baglanti Kapatildi")
