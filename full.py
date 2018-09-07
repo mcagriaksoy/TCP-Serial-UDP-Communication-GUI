@@ -97,7 +97,7 @@ class Worker3(QObject):
         # host = self.textEdit_10.toPlainText()
         # port_tcp = self.textEdit_12.toPlainText()
         host = socket.gethostname()
-        s.connect(('127.0.0.1', 4447))  # Connect to server address
+        s.connect(('127.0.0.1', 4448))  # Connect to server address
 
 
         while self.working:
@@ -121,7 +121,7 @@ class Worker4(QObject):
 
 
     def work(self):
-        server_address = ('127.0.0.1', 4447)
+        server_address = ('127.0.0.1', 4448)
         print("connected:")
         s2.bind(server_address)
         s2.listen(1)
@@ -287,7 +287,9 @@ class qt(QMainWindow):
 
     def on_pushButton_14_clicked(self):
         mytext = self.textEdit_2.toPlainText()
-        mytext2 = mytext.encode("utf-8")
+
+        mytext2 = binascii.unhexlify(mytext)
+
         ser.write(mytext2)
 
     def stop_loop(self):
@@ -382,10 +384,10 @@ class qt(QMainWindow):
             self.progressBar_10.setValue(self.completed2)
 
         data = self.textEdit_37.toPlainText()
-        q, addr = s2.accept()
-        time.sleep(0.1)
-        data.encode()
-        q.send(data)
+        # q, addr = s2.accept()
+        # time.sleep(0.1)
+        # data.encode()
+        # q.send(data)
 
     def on_pushButton_39_clicked(self):
         self.textEdit_40.setText("Baglanti Kapatildi")
