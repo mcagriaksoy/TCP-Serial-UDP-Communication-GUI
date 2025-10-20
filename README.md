@@ -1,5 +1,5 @@
 # TCP-Serial-UDP-Communication-GUI
-PyQt Serial Communication, UDP Broadcast and TCP Server, Client Program. 
+PySide6  Serial Communication, UDP Broadcast and TCP Server, Client Program. 
 
 Each Tab has unique purpose.
 In serial Tab, you can send data to hardware in ascii or hex format.
