@@ -8,10 +8,9 @@ import warnings
 
 import serial
 import serial.tools.list_ports
-from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAction, QApplication, QWidget, QInputDialog, QLineEdit, \
-    QFileDialog, QTabWidget
-from PyQt5.uic import loadUi
+from PySide6.QtCore import QObject, QThread, Signal, Slot
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QInputDialog, QLineEdit, QFileDialog, QTabWidget
+from ui_qt import Ui_qt
 
 receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 receiver.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -45,10 +44,9 @@ ser = serial.Serial(ports[0], baudrate[3])
 
 
 class Worker(QObject):
-    finished = pyqtSignal()
-    intReady = pyqtSignal(str)
+    finished = Signal()
+    intReady = Signal(str)
 
-    @pyqtSlot()
     def __init__(self):
         super(Worker, self).__init__()
         self.working = True
@@ -66,10 +64,9 @@ class Worker(QObject):
 
 
 class Worker2(QObject):
-    finished = pyqtSignal()
-    intReady = pyqtSignal(str)
+    finished = Signal()
+    intReady = Signal(str)
 
-    @pyqtSlot()
     def __init__(self):
         super(Worker2, self).__init__()
         self.working = True
@@ -85,10 +82,9 @@ class Worker2(QObject):
 
 
 class Worker3(QObject):
-    finished = pyqtSignal()
-    intReady = pyqtSignal(str)
+    finished = Signal()
+    intReady = Signal(str)
 
-    @pyqtSlot()
     def __init__(self):
         super(Worker3, self).__init__()
         self.working = True
@@ -111,11 +107,10 @@ class Worker3(QObject):
 
 
 class Worker4(QObject):
-    finished = pyqtSignal()
-    intReady = pyqtSignal(str)
-    @pyqtSlot(str)
+    finished = Signal()
+    intReady = Signal(str)
+
     def __init__(self):
-        QMainWindow.__init__(self)
         super(Worker4, self).__init__()
         self.working = True
 
@@ -147,7 +142,16 @@ class qt(QMainWindow):
     def __init__(self):
 
         QMainWindow.__init__(self)
-        loadUi('qt.ui', self)
+        # Setup UI from generated Python module and copy widget attributes onto self
+        self.ui = Ui_qt()
+        self.ui.setupUi(self)
+        # copy attributes (widgets) from the Ui instance to this window for compatibility
+        for name, val in self.ui.__dict__.items():
+            if not name.startswith('__'):
+                try:
+                    setattr(self, name, val)
+                except Exception:
+                    pass
 
         self.thread = None
         self.worker = None
@@ -398,7 +402,7 @@ def run():
     app = QApplication(sys.argv)
     widget = qt()
     widget.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
